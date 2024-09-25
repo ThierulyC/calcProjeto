@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Bem-vindo ao Projeto Calculadora Energética</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOMpD5g08I8Y8P2IVrCzLr1a3z/e/i24G7W8S7" crossorigin="anonymous">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, #1e90ff, #87cefa); /* Degradê azul */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            text-align: center;
+            background-color: #fff;
+            padding: 60px 40px;
+            border-radius: 15px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+            max-width: 600px;
+            margin: 20px;
+            transition: transform 0.3s;
+        }
+
+        .container:hover {
+            transform: translateY(-5px);
+        }
+
+        h1 {
+            color: #4169E1; /* Azul Royal */
+            font-size: 36px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        p {
+            font-size: 18px;
+            margin: 10px 0;
+            color: #555;
+            line-height: 1.5;
+        }
+
+        .btn {
+            display: inline-block;
+            margin: 15px 10px;
+            padding: 12px 25px;
+            background-color: #4169E1; /* Azul Royal */
+            color: #fff;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 18px;
+            transition: background-color 0.3s, transform 0.2s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn:hover {
+            background-color: #3652a3;
+            transform: scale(1.05);
+        }
+
+        .icon {
+            font-size: 48px;
+            color: #4169E1; /* Azul Royal */
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 40px 20px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            .btn {
+                font-size: 16px;
+                padding: 10px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon">
+            <i class="fas fa-bolt"></i> <!-- Ícone de raio -->
+        </div>
+        <h1>Projeto Calculadora Energética -SESI / SENAI
+       <span class="icon-relampago">⚡</span></h1>
+
+        <p>Aluna: Thieruly Aparecida mais conhecida como Cidinha</p>
+        <p>Professora- SESI: Ana Paula</p>
+        <p>Professor- SENAI: Marcos e Hermilo</p>
+
+
+        <a href="casa.html" class="btn">Casas</a>
+        <a href="calculadora.html" class="btn">Calculadora Energética</a>
+        <a href="index.html" class="btn">Admin - Gerenciar</a>
+    </div>
+</body>
+</html>

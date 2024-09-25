@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora de Consumo</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOMpD5g08I8Y8P2IVrCzLr1a3z/e/i24G7W8S7" crossorigin="anonymous">
+  <style>
+    body {
+      background: linear-gradient(to bottom, #1e90ff, #87cefa); /* Degradê azul */
+      color: #333;
+      margin: 0;
+      padding: 0;
+      height: 1000px;
+    }
+
+    .container {
+      max-width: 500px;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      margin-top: 50px;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 1.8rem;
+      color: #333;
+      margin-bottom: 30px;
+    }
+
+    .icon-relampago {
+      font-size: 1.5rem;
+      color: #ffc107;
+    }
+
+    label {
+      font-weight: bold;
+      color: #444;
+    }
+
+    .form-select, .form-control {
+      margin-bottom: 20px;
+      font-size: 1rem;
+      padding: 10px;
+      border-radius: 8px;
+    }
+
+    .info-dispositivo {
+      background-color: #f7f9fc;
+      padding: 10px 15px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+
+    .calcular-btn {
+      width: 100%;
+      background-color: #1e90ff; /* Azul */
+      color: white;
+      padding: 15px;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .calcular-btn:hover {
+      background-color: #1c7cc3; /* Azul escuro */
+      transform: scale(1.05);
+    }
+
+    .resultados p {
+      font-size: 1.1rem;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .resultados span {
+      font-weight: bold;
+      color: #28a745;
+    }
+
+    .btn-back {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background-color: white;
+      border: 1px solid #007bff;
+      color: #007bff;
+    }
+
+    .btn-back:hover {
+      background-color: #007bff;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Calculadora de Consumo <span class="icon-relampago">⚡</span></h1>
+
+    <!-- Botão de Navegação -->
+    <a href="javascript:history.back()" class="btn btn-back">Voltar</a>
+
+    <!-- Seleção de dependência -->
+    <div class="mb-3">
+      <label for="dependencia">Dependência</label>
+      <select class="form-select" id="dependencia" onchange="fetchDispositivos(this.value)">
+        <option value="" selected disabled>Escolha uma dependência</option>
+        <!-- Dependências serão carregadas dinamicamente -->
+      </select>
+    </div>
+
+    <!-- Seleção de dispositivo -->
+    <div class="mb-3">
+      <label for="dispositivo">Dispositivo</label>
+      <select class="form-select" id="dispositivo" onchange="exibirFormDados()">
+        <option value="" selected disabled>Escolha um dispositivo</option>
+        <!-- Dispositivos serão carregados dinamicamente -->
+      </select>
+    </div>
+
+    <!-- Inserção manual de potência e tempo de uso -->
+    <div id="form-dados" class="info-dispositivo" style="display: none;">
+      <h5>Insira os dados do Dispositivo</h5>
+      <div class="mb-3">
+        <label for="potencia">Potência (W)</label>
+        <input type="number" class="form-control" id="potencia" placeholder="Insira a potência">
+      </div>
+      <div class="mb-3">
+        <label for="tempo-uso">Tempo de uso diário (horas)</label>
+        <input type="number" class="form-control" id="tempo-uso" placeholder="Insira o tempo de uso">
+      </div>
+    </div>
+
+    <!-- Seleção de bandeira tarifária -->
+    <div class="mb-4">
+      <label for="bandeira">Bandeira Tarifária</label>
+      <select class="form-select" id="bandeira">
+        <option value="verde" selected>Bandeira Verde (0 R$/kWh)</option>
+        <option value="amarela">Bandeira Amarela (1,5 R$/kWh)</option>
+        <option value="vermelha">Bandeira Vermelha 1 (3 R$/kWh)</option>
+        <option value="vermelha">Bandeira Vermelha 2 (5 R$/kWh)</option>
+      </select>
+    </div>
+
+    <button class="calcular-btn" onclick="calcularConsumo()">Calcular Consumo</button>
+
+    <!-- Resultados -->
+    <div class="mt-4 resultados">
+      <p><strong>Consumo Diário:</strong> <span id="consumo-diario">0.00</span> kWh</p>
+      <p><strong>Consumo Mensal:</strong> <span id="consumo-mensal">0.00</span> kWh</p>
+      <p><strong>Consumo Anual:</strong> <span id="consumo-anual">0.00</span> kWh</p>
+      <p><strong>Preço Diário:</strong> R$ <span id="preco-diario">0.00</span></p>
+      <p><strong>Preço Mensal:</strong> R$ <span id="preco-mensal">0.00</span></p>
+      <p><strong>Preço Anual:</strong> R$ <span id="preco-anual">0.00</span></p>
+    </div>
+  </div>
+
+  <script>
+    const unidadeConsumidoraId = 2; // ID da unidade consumidora
+
+    // Função para buscar as dependências da unidade consumidora
+    const fetchDependencias = async () => {
+      try {
+        const response = await fetch(`http://127.0.0.1:8000/unidades-consumidoras/${unidadeConsumidoraId}`);
+        const data = await response.json();
+
+        const dependenciaSelect = document.getElementById('dependencia');
+        data.dependencias.forEach(dependencia => {
+          dependenciaSelect.innerHTML += `<option value="${dependencia.id}">${dependencia.nome}</option>`;
+        });
+      } catch (error) {
+        console.error('Erro ao buscar as dependências:', error);
+      }
+    };
+
+    // Função para buscar os dispositivos da dependência
+    const fetchDispositivos = async (dependenciaId) => {
+      try {
+        const response = await fetch(`http://127.0.0.1:8000/dispositivos/dependencias/${dependenciaId}`);
+        const data = await response.json();
+
+        const dispositivoSelect = document.getElementById('dispositivo');
+        dispositivoSelect.innerHTML = '<option value="" selected disabled>Escolha um dispositivo</option>';
+        data.dispositivos.forEach(dispositivo => {
+          dispositivoSelect.innerHTML += `<option value="${dispositivo.id}">${dispositivo.nome}</option>`;
+        });
+      } catch (error) {
+        console.error('Erro ao buscar os dispositivos:', error);
+      }
+    };
+
+    // Função para exibir o formulário de dados
+    const exibirFormDados = () => {
+      document.getElementById('form-dados').style.display = 'block';
+    };
+
+    // Função para calcular o consumo total
+    const calcularConsumo = () => {
+      const potencia = parseFloat(document.getElementById('potencia').value);
+      const horasUso = parseFloat(document.getElementById('tempo-uso').value);
+
+      if (isNaN(potencia) || isNaN(horasUso)) {
+        alert('Por favor, insira valores válidos de potência e tempo de uso!');
+        return;
+      }
+
+      let consumoDiario = (potencia * horasUso) / 1000; // Consumo diário em kWh
+      const consumoMensal = consumoDiario * 30;
+      const consumoAnual = consumoDiario * 365;
+
+      // Obter a bandeira tarifária
+      const bandeira = document.getElementById('bandeira').value;
+      let precoPorKwh;
+
+      switch (bandeira) {
+        case 'verde':
+          precoPorKwh = 0;
+          break;
+        case 'amarela':
+          precoPorKwh = 1.5;
+          break;
+        case 'vermelha':
+          precoPorKwh = 3;
+          break;
+        case 'vermelha2':
+          precoPorKwh = 5;
+          break;
+        default:
+          precoPorKwh = 0;
+          break;
+      }
+
+      const precoDiario = consumoDiario * precoPorKwh;
+      const precoMensal = consumoMensal * precoPorKwh;
+      const precoAnual = consumoAnual * precoPorKwh;
+
+      // Atualizar os resultados na tela
+      document.getElementById('consumo-diario').innerText = consumoDiario.toFixed(2);
+      document.getElementById('consumo-mensal').innerText = consumoMensal.toFixed(2);
+      document.getElementById('consumo-anual').innerText = consumoAnual.toFixed(2);
+      document.getElementById('preco-diario').innerText = precoDiario.toFixed(2);
+      document.getElementById('preco-mensal').innerText = precoMensal.toFixed(2);
+      document.getElementById('preco-anual').innerText = precoAnual.toFixed(2);
+    };
+
+    // Carregar as dependências ao carregar a página
+    window.onload = fetchDependencias;
+  </script>
+</body>
+</html>
